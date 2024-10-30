@@ -12,7 +12,7 @@ render();
 function getFeedHtml() {
   let feedHtml = ""; // Final return value
 
-  tweetsData.forEach((tweet) => {
+JSON.parse(localStorage.getItem('tweetsData')).forEach((tweet) => {
     let likeIconClass = "";
     let retweetIconClass = "";
     let repliesHtml = "";
@@ -131,6 +131,7 @@ function handleTweetBtnClick() {
   const tweetInput = document.getElementById("tweet-input");
 
   if (tweetInput.value) {
+    // Add new tweet at the top of tweets stack
     tweetsData.unshift({
       handle: `@David👍`,
       profilePic: `images/me-logo.webp`,
@@ -142,7 +143,15 @@ function handleTweetBtnClick() {
       isRetweeted: false,
       uuid: uuidv4(),
     });
+
+    // Store new tweet in localStorage
+    let existing = localStorage.getItem('tweetsData');
+    let data = existing ? existing + JSON.stringify(tweetsData) : JSON.stringify(tweetsData);
+
+    
+    localStorage.setItem('tweetsData', JSON.stringify(tweetsData));
     render();
+    
     tweetInput.value = "";
   }
 }
